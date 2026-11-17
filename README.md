@@ -127,6 +127,14 @@ cd frontend
 npm run dev
 ```
 
+**Deployment (public URL)**
+
+The app deploys as one Docker container: the FastAPI backend serves the built React site and the API from the same address.
+
+- **Render (free):** push to GitHub → render.com → *New → Blueprint* → choose this repository → *Apply*. `render.yaml` and `Dockerfile` do the rest. The app is at `https://ecoroute-xxxx.onrender.com`.
+- **Any Docker host:** `docker build -t ecoroute .` then `docker run -p 8000:8000 ecoroute` → `http://localhost:8000`.
+- On Render's free plan the service sleeps after about 15 minutes idle; the first visit then takes about a minute. The SQLite file is not persistent there: it resets to the sample data on each restart or deploy.
+
 **Tests and validation**
 
 ```bash
