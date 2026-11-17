@@ -1,0 +1,10 @@
+# Render Blueprint: deploys EcoRoute as one free web service from this repo.
+# Render dashboard → New → Blueprint → pick this repository → Apply.
+services:
+  - type: web
+    name: ecoroute
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true

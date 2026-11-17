@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from . import db
 from .models import (LocationCreate, LocationUpdate, OptimizeRequest, OverflowRequest,
@@ -152,3 +154,21 @@ def db_stats():
 def db_reset():
     db.reset_to_sample()
     return db.stats()
+
+
+# ── Production: serve the built React app from the same server ───────────────
+# In the Docker image the frontend build is copied to STATIC_DIR, so one URL
+# serves both the website and the API (no CORS or API URL setup needed).
+STATIC_DIR = Path(os.getenv("STATIC_DIR", Path(__file__).resolve().parent.parent / "static"))
+
+if STATIC_DIR.is_dir():
+    _root = STATIC_DIR.resolve()
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    def spa(full_path: str):
+        if full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="Not found")
+        candidate = (_root / full_path).resolve()
+        if full_path and candidate.is_file() and _root in candidate.parents:
+            return FileResponse(candidate)
+        return FileResponse(_root / "index.html")   # React Router handles the page

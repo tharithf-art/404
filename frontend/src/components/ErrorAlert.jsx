@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { XCircle, WifiOff } from 'lucide-react';
+import { API_BASE } from '../services/api';
 
 export default function ErrorAlert({ error, onDismiss }) {
   if (!error) return null;
@@ -21,7 +22,7 @@ export default function ErrorAlert({ error, onDismiss }) {
           <p className="text-xs text-red-600 mt-1">
             Start the backend: <code className="bg-red-100 px-1 rounded">cd backend &amp;&amp; uvicorn app.main:app --port 8000</code>{' '}
             (expected at <code className="bg-red-100 px-1 rounded">
-              {import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}
+              {API_BASE || window.location.origin}
             </code>)
           </p>
         )}

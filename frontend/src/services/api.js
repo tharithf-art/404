@@ -4,7 +4,11 @@
  */
 import axios from 'axios';
 
-export const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// Development: the backend runs on localhost:8000.
+// Production build (Docker / Render): the backend serves this site, so calls go
+// to the same address ('' = same origin). VITE_API_BASE_URL overrides both.
+export const API_BASE = import.meta.env.VITE_API_BASE_URL
+  ?? (import.meta.env.PROD ? '' : 'http://localhost:8000');
 
 const apiClient = axios.create({
   baseURL: API_BASE,
