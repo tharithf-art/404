@@ -1,0 +1,30 @@
+{
+  "_note": "SIMULATED data: coordinates are estimated sample positions on real named roads in Colombo 07/08/10; waste quantities are simulated. Vehicle capacities are project assumptions.",
+  "locations": [
+    {"id":"LOC-001","name":"Public Library (Sir Marcus Fernando Mw.)","lat":6.9220,"lng":79.8617,"waste_kg":240,"priority":"High"},
+    {"id":"LOC-002","name":"Marcus Fernando Mawatha","lat":6.9205,"lng":79.8610,"waste_kg":210,"priority":"Medium"},
+    {"id":"LOC-003","name":"Dharmapala Mawatha","lat":6.9178,"lng":79.8580,"waste_kg":260,"priority":"High"},
+    {"id":"LOC-004","name":"Green Path (West)","lat":6.9160,"lng":79.8600,"waste_kg":190,"priority":"Low"},
+    {"id":"LOC-005","name":"C.W.W. Kannangara Mawatha","lat":6.9143,"lng":79.8625,"waste_kg":280,"priority":"High"},
+    {"id":"LOC-006","name":"Albert Crescent","lat":6.9130,"lng":79.8640,"waste_kg":200,"priority":"Medium"},
+    {"id":"LOC-007","name":"Flower Road","lat":6.9115,"lng":79.8655,"waste_kg":300,"priority":"High"},
+    {"id":"LOC-008","name":"Reid Avenue","lat":6.9098,"lng":79.8668,"waste_kg":220,"priority":"Medium"},
+    {"id":"LOC-009","name":"Cambridge Place","lat":6.9085,"lng":79.8680,"waste_kg":185,"priority":"Low"},
+    {"id":"LOC-010","name":"Ananda Coomaraswamy Mawatha","lat":6.9070,"lng":79.8695,"waste_kg":250,"priority":"High"},
+    {"id":"LOC-011","name":"Siridhamma Mawatha","lat":6.9055,"lng":79.8710,"waste_kg":230,"priority":"Medium"},
+    {"id":"LOC-012","name":"Baseline Road (Borella)","lat":6.9040,"lng":79.8730,"waste_kg":365,"priority":"High"},
+    {"id":"LOC-013","name":"Campbell Terrace","lat":6.9100,"lng":79.8745,"waste_kg":195,"priority":"Low"},
+    {"id":"LOC-014","name":"Nalanda Place","lat":6.9120,"lng":79.8760,"waste_kg":180,"priority":"Low"},
+    {"id":"LOC-015","name":"Punchi Borella Junction","lat":6.9025,"lng":79.8755,"waste_kg":310,"priority":"High"},
+    {"id":"LOC-016","name":"Greenpath (East / Park Side)","lat":6.9152,"lng":79.8635,"waste_kg":205,"priority":"Medium"},
+    {"id":"LOC-017","name":"Ward Place","lat":6.9192,"lng":79.8650,"waste_kg":245,"priority":"Medium"},
+    {"id":"LOC-018","name":"Gregory's Road","lat":6.9168,"lng":79.8720,"waste_kg":270,"priority":"High"},
+    {"id":"LOC-019","name":"Horton Place","lat":6.9140,"lng":79.8755,"waste_kg":235,"priority":"Medium"},
+    {"id":"LOC-020","name":"Rosmead Place","lat":6.9110,"lng":79.8775,"waste_kg":230,"priority":"Medium"}
+  ],
+  "vehicles": [
+    {"id":"V001","capacity_kg":1000,"type":"Compact Truck"},
+    {"id":"V002","capacity_kg":1500,"type":"Medium Truck"},
+    {"id":"V003","capacity_kg":3000,"type":"Heavy Truck"}
+  ]
+}
