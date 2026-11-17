@@ -1,0 +1,89 @@
+/**
+ * index.css — EcoRoute global styles.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { @apply h-full; scroll-behavior: smooth; }
+  body {
+    @apply h-full bg-slate-50 text-slate-800 font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  #root { @apply h-full; }
+  h1 { @apply text-2xl font-bold tracking-tight; }
+  h2 { @apply text-xl font-semibold tracking-tight; }
+  h3 { @apply text-lg font-semibold; }
+}
+
+@layer components {
+  .card { @apply bg-white rounded-xl border border-slate-200 shadow-sm p-5; }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-600 text-white
+           font-medium text-sm hover:bg-green-700 active:scale-95
+           transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-slate-700
+           border border-slate-300 font-medium text-sm hover:bg-slate-50
+           active:scale-95 transition-all duration-150
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-danger {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50 text-red-700
+           border border-red-200 font-medium text-sm hover:bg-red-100
+           active:scale-95 transition-all duration-150
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-8 h-8 rounded-lg
+           hover:bg-slate-100 text-slate-500 hover:text-slate-700
+           transition-colors duration-150;
+  }
+  .input {
+    @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2
+           text-sm text-slate-900 placeholder:text-slate-400
+           focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent
+           transition-shadow duration-150;
+  }
+  .select {
+    @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2
+           text-sm text-slate-900
+           focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent
+           transition-shadow duration-150;
+  }
+  .label { @apply block text-xs font-medium text-slate-600 mb-1; }
+  .badge { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium; }
+  .table-header {
+    @apply text-left text-xs font-semibold text-slate-500 uppercase tracking-wider
+           px-4 py-3 bg-slate-50 border-b border-slate-200;
+  }
+  .table-cell { @apply px-4 py-3 text-sm text-slate-700 border-b border-slate-100; }
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+           text-slate-600 hover:text-slate-900 hover:bg-slate-100
+           transition-colors duration-150 cursor-pointer;
+  }
+  .sidebar-link-active {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+           bg-green-50 text-green-700 border border-green-200;
+  }
+}
+
+.leaflet-container { font-family: 'Inter', system-ui, sans-serif !important; border-radius: 0.75rem; }
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
+  font-family: 'Inter', system-ui, sans-serif;
+  padding: 0 !important;
+}
+.leaflet-popup-content { margin: 0 !important; font-size: 0.875rem; }
+.leaflet-popup-tip-container { display: none; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
