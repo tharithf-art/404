@@ -1,0 +1,16 @@
+# dependencies / builds
+node_modules/
+frontend/dist/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+# secrets
+.env
+.env.*
+!.env.example
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
