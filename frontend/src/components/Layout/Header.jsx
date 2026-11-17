@@ -6,7 +6,7 @@ import { Menu } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function Header({ title, onMenuClick }) {
-  const { totalWaste, totalCapacity, backendOnline } = useApp();
+  const { totalWaste, totalCapacity, backendOnline, dataSource } = useApp();
   const pct = totalCapacity > 0 ? Math.round((totalWaste / totalCapacity) * 100) : 0;
 
   return (
@@ -25,6 +25,10 @@ export default function Header({ title, onMenuClick }) {
           </span>
           <span className="text-xs text-slate-400">({pct}%)</span>
         </div>
+        <span className={`hidden md:inline-flex badge ${dataSource === 'database' ? 'bg-green-100 text-green-700' : dataSource === 'offline' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'}`}
+          title={dataSource === 'offline' ? 'Backend offline: using built-in sample data, changes are not saved' : 'Data is saved in the SQLite database'}>
+          {dataSource === 'database' ? 'Data: database (saved)' : dataSource === 'offline' ? 'Data: sample (not saved)' : 'Data: loading…'}
+        </span>
         <div className="flex items-center gap-1.5 text-xs text-slate-500" title="Optimisation backend status">
           <span className={`w-2 h-2 rounded-full ${backendOnline === null ? 'bg-slate-300' : backendOnline ? 'bg-green-500' : 'bg-red-500'}`} />
           <span className="hidden md:inline">{backendOnline === null ? 'Checking…' : backendOnline ? 'Backend online' : 'Backend offline'}</span>

@@ -11,7 +11,7 @@ export default function ScenarioBar() {
     locations, availableVehicles, totalWaste, totalCapacity,
     runOptimisation, isOptimising, autoRecalc, setAutoRecalc,
     simulateOverflow, resetScenario, lastEvent, isStale, optimisationResult,
-    setOptimisationError,
+    setOptimisationError, dataSource,
   } = useApp();
   const [busy, setBusy] = useState(false);
 
@@ -46,7 +46,9 @@ export default function ScenarioBar() {
             title="Randomly mark ~25% of bins as overflowing (×1.5–2.5 waste, treated as High priority)">
             <Flame size={15} className="text-red-500" /> Simulate overflow
           </button>
-          <button className="btn-secondary" onClick={resetScenario} disabled={isOptimising}>
+          <button className="btn-secondary" disabled={isOptimising} onClick={() => {
+            if (dataSource !== 'database' || window.confirm('Reset replaces ALL locations and vehicles in the database with the original 20-location sample. Continue?')) resetScenario();
+          }}>
             <RotateCcw size={15} /> Reset
           </button>
           <button id="generate-routes-btn" className="btn-primary" onClick={runOptimisation}

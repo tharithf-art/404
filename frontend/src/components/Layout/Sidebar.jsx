@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, MapPin, Truck, Map, Route, BarChart3, Leaf, X } from 'lucide-react';
+import { LayoutDashboard, MapPin, Truck, Map, Route, BarChart3, Leaf, X, Database } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/',             icon: LayoutDashboard, label: 'Dashboard'            },
@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { to: '/optimisation', icon: Route,           label: 'Routes & Schedules'   },
   { to: '/map',          icon: Map,             label: 'Interactive Map'      },
   { to: '/comparison',   icon: BarChart3,       label: 'Strategy Comparison'  },
+  { to: '/database',     icon: Database,        label: 'Database'             },
 ];
 
 export default function Sidebar({ open, onClose }) {

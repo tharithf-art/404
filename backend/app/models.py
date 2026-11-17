@@ -96,3 +96,46 @@ class OverflowRequest(BaseModel):
         if self.max_factor < self.min_factor:
             raise ValueError("max_factor must be >= min_factor")
         return self
+
+
+# ── Database record schemas (CRUD) ───────────────────────────────────────────
+class LocationCreate(BaseModel):
+    id: Optional[str] = Field(default=None, min_length=1, max_length=64)
+    name: str = Field(min_length=1, max_length=200)
+    area: Optional[str] = Field(default="", max_length=200)
+    lat: float = Field(ge=-90, le=90)
+    lng: float = Field(ge=-180, le=180)
+    waste_kg: float = Field(ge=0, le=100_000)
+    priority: Priority = "Medium"
+    overflow: bool = False
+    note: Optional[str] = Field(default="", max_length=500)
+
+
+class LocationUpdate(BaseModel):
+    name: Optional[str] = Field(default=None, min_length=1, max_length=200)
+    area: Optional[str] = Field(default=None, max_length=200)
+    lat: Optional[float] = Field(default=None, ge=-90, le=90)
+    lng: Optional[float] = Field(default=None, ge=-180, le=180)
+    waste_kg: Optional[float] = Field(default=None, ge=0, le=100_000)
+    priority: Optional[Priority] = None
+    overflow: Optional[bool] = None
+    note: Optional[str] = Field(default=None, max_length=500)
+
+
+class VehicleCreate(BaseModel):
+    id: Optional[str] = Field(default=None, min_length=1, max_length=64)
+    label: Optional[str] = Field(default=None, max_length=100)
+    type: Optional[str] = Field(default="", max_length=100)
+    capacity_kg: float = Field(gt=0, le=100_000)
+    available: bool = True
+    color: Optional[str] = Field(default=None, pattern=r"^#[0-9a-fA-F]{6}$")
+    colorName: Optional[str] = Field(default=None, max_length=30)
+
+
+class VehicleUpdate(BaseModel):
+    label: Optional[str] = Field(default=None, max_length=100)
+    type: Optional[str] = Field(default=None, max_length=100)
+    capacity_kg: Optional[float] = Field(default=None, gt=0, le=100_000)
+    available: Optional[bool] = None
+    color: Optional[str] = Field(default=None, pattern=r"^#[0-9a-fA-F]{6}$")
+    colorName: Optional[str] = Field(default=None, max_length=30)

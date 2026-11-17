@@ -238,6 +238,11 @@ export default function RouteOptimisation() {
             </div>
           </div>
 
+          {r.from_history && (
+            <div className="rounded-lg bg-blue-50 border border-blue-200 px-4 py-2 text-xs text-blue-800">
+              Showing saved run #{r.run_id} from the database history. Click <strong>Re-optimise</strong> to recalculate with the current data.
+            </div>
+          )}
           {r.warnings?.length > 0 && (
             <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-2 text-xs text-amber-800">
               {r.warnings.map((w) => <p key={w}>⚠ {w}</p>)}

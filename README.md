@@ -63,6 +63,7 @@ The penalty term is far larger than any distance term, so collecting waste alway
 |---|---|
 | Frontend | React 19, Vite, Tailwind CSS 3, React Router, Recharts, Leaflet + React-Leaflet, Axios, Lucide icons |
 | Backend | Python 3.10+, FastAPI, Pydantic v2 (validation), Uvicorn |
+| Database | SQLite (Python built-in `sqlite3`, no install). Schema: `backend/db/schema.sql` |
 | Algorithms | Pure Python (no external solver), written by the team |
 | Maps | OpenStreetMap tiles via Leaflet |
 | Testing | pytest + FastAPI TestClient; benchmark script |
@@ -82,9 +83,12 @@ The penalty term is far larger than any distance term, so collecting waste alway
 │ models.py    Pydantic schemas + input validation                              │
 │ service.py   build problem → run strategies → schedules → response           │
 │ geo.py       haversine × road factor distance matrix                          │
+│ db.py        SQLite: locations, vehicles, optimisation_runs (history)          │
 │ solver/      problem.py · baselines.py · cvrp.py · schedule.py               │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
+
+Locations and vehicles are stored in SQLite and loaded by the frontend on start. Every edit is saved, and every optimisation run is logged. If the backend is offline, the frontend falls back to the built-in sample data (not saved).
 
 The frontend contains no optimisation logic. All computation happens in the backend, so the solver can be tested on its own.
 
@@ -107,6 +111,10 @@ copy .env.example .env      # Windows   (macOS/Linux: cp .env.example .env)
 
 ## 7. Execution
 
+**Easiest (Windows):** double-click `start-ecoroute.bat`. It opens the backend and frontend in two windows and launches the browser.
+
+**Manual:**
+
 Open two terminals:
 
 ```bash
@@ -123,7 +131,7 @@ npm run dev
 
 ```bash
 cd backend
-python -m pytest                       # 23 tests: capacity, feasibility, priorities, validation, API
+python -m pytest                       # 28 tests: capacity, feasibility, priorities, validation, API, database
 python -m scripts.benchmark --runs 20  # strategies compared over 20 random scenarios
 ```
 
@@ -137,6 +145,20 @@ python -m scripts.benchmark --runs 20  # strategies compared over 20 random scen
 6. **Collection Locations.** Edit a waste value inline. The routes update.
 
 ## 8. Dataset and API information
+
+### Database (SQLite)
+
+| Table | Contents |
+|---|---|
+| `locations` | id, name, area, lat, lng, waste_kg, priority, overflow, note, updated_at |
+| `vehicles` | id, label, type, capacity_kg, available, color, color_name, updated_at |
+| `optimisation_runs` | timestamp, input sizes, distances, collected kg, unserviced count, utilisation, full JSON result |
+
+- The file `backend/data/ecoroute.db` is created automatically on first start and filled with the sample scenario. It is git-ignored.
+- **View it:** the app's **Database** page, *DB Browser for SQLite*, or the VS Code *SQLite Viewer* extension.
+- **Add data:** the Locations and Vehicles pages (saved automatically), or `http://localhost:8000/docs` → `POST /api/locations`.
+- **Reset:** Database page → *Reset to sample data* (or delete the `.db` file and restart the backend).
+
 
 - **Sample scenario:** `backend/data/sample_scenario.json` (the same data is in `frontend/src/data/mockData.js`).
   - **This is simulated data.** The road and place names are real streets in Colombo 07/08/10. GPS positions are estimates, not surveyed. Waste quantities are simulated (20 locations, 4,800 kg in total).
@@ -161,7 +183,9 @@ python -m scripts.benchmark --runs 20  # strategies compared over 20 random scen
 }
 ```
 
-The response contains `routes[]`, each with `stops`, `schedule[]` (arrival, departure, load, leg km), `total_distance_km`, `capacity_pct` and `geometry`. It also contains `unserviced`, `unserviced_details[]` (reason and recommendation), `baseline`, `baseline_distance_km`, `optimised_distance_km`, `utilisation`, `strategies[]`, `warnings`, `solver` and `assumptions`. Invalid input (duplicate IDs, negative capacity, bad coordinates, no available vehicle, bad time format) returns **HTTP 422** with field-level messages.
+The response contains `routes[]`, each with `stops`, `schedule[]` (arrival, departure, load, leg km), `total_distance_km`, `capacity_pct` and `geometry`. It also contains `unserviced`, `unserviced_details[]` (reason and recommendation), `baseline`, `baseline_distance_km`, `optimised_distance_km`, `utilisation`, `strategies[]`, `warnings`, `solver` and `assumptions`. **Database endpoints:** `GET/POST /api/locations`, `PUT/DELETE /api/locations/{id}`, the same for `/api/vehicles`, `GET /api/runs`, `GET /api/runs/{id}`, `DELETE /api/runs`, `GET /api/db/stats`, `POST /api/db/reset`.
+
+Invalid input (duplicate IDs, negative capacity, bad coordinates, no available vehicle, bad time format) returns **HTTP 422** with field-level messages.
 
 ## 9. Testing and validation results
 
@@ -186,7 +210,7 @@ All strategies were capacity-feasible in every run. With enough capacity, EcoRou
 - Shift length is reported as a warning, not enforced as a hard constraint. There are no customer time windows.
 - Results are heuristic (near-optimal), not proven optimal. Quality depends on the time budget (1.5 s by default).
 - Data is simulated. Real use would need surveyed coordinates, measured fill levels (e.g. bin sensors) and verified fleet specifications.
-- No authentication or persistence. The scenario is held in browser memory and resets on reload.
+- No authentication: anyone who can reach the backend can edit the data. SQLite is single-user and suited to a demo, not a multi-user deployment.
 
 **Future work:** OSRM road distances, multi-trip with disposal sites, time windows, waste forecasting from historical fill data, multi-day scheduling.
 
@@ -199,16 +223,19 @@ backend/
     models.py          request/response validation
     service.py         orchestration, schedules, unserviced reasons
     geo.py             distance matrix
+    db.py              SQLite persistence (CRUD + run history)
     solver/
       problem.py       CVRP model + objective
       baselines.py     sequential baseline, nearest neighbour
       cvrp.py          regret insertion, sweep, local search, ILS
       schedule.py      timetable builder
-  data/sample_scenario.json
+  db/schema.sql        database schema
+  data/sample_scenario.json   (ecoroute.db is created here)
   scripts/benchmark.py
   tests/test_solver.py
   requirements.txt
+start-ecoroute.bat     one-click start (Windows)
 frontend/
-  src/ pages/, components/, context/AppContext.jsx, services/api.js, data/mockData.js
+  src/ pages/ (incl. DatabaseView.jsx), components/, context/AppContext.jsx, services/api.js, data/mockData.js
   package.json, vite.config.js, tailwind.config.js, .env.example
 ```

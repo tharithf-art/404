@@ -14,6 +14,9 @@ import VehicleManagement from './pages/VehicleManagement';
 import InteractiveMap from './pages/InteractiveMap';
 import RouteOptimisation from './pages/RouteOptimisation';
 import RouteComparison from './pages/RouteComparison';
+import DatabaseView from './pages/DatabaseView';
+import { useApp } from './context/AppContext';
+import { XCircle } from 'lucide-react';
 
 const PAGE_TITLES = {
   '/': 'Dashboard',
@@ -22,7 +25,19 @@ const PAGE_TITLES = {
   '/map': 'Interactive Map',
   '/optimisation': 'Routes & Collection Schedules',
   '/comparison': 'Strategy Comparison',
+  '/database': 'Database',
 };
+
+function DataErrorBanner() {
+  const { dataError, setDataError } = useApp();
+  if (!dataError) return null;
+  return (
+    <div className="mx-5 lg:mx-7 mt-4 rounded-lg bg-red-50 border border-red-200 px-4 py-2.5 flex items-start gap-2 text-sm text-red-700">
+      <span className="flex-1"><strong>Could not save to database:</strong> {dataError.message}</span>
+      <button className="btn-icon text-red-500" onClick={() => setDataError(null)}><XCircle size={16} /></button>
+    </div>
+  );
+}
 
 function AppShell() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -35,6 +50,7 @@ function AppShell() {
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header title={title} onMenuClick={() => setSidebarOpen(true)} />
         <main className="flex-1 overflow-y-auto">
+          <DataErrorBanner />
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/locations" element={<CollectionLocations />} />
@@ -42,6 +58,7 @@ function AppShell() {
             <Route path="/map" element={<InteractiveMap />} />
             <Route path="/optimisation" element={<RouteOptimisation />} />
             <Route path="/comparison" element={<RouteComparison />} />
+            <Route path="/database" element={<DatabaseView />} />
             <Route path="*" element={
               <div className="flex items-center justify-center h-full text-slate-500">
                 <div className="text-center">
