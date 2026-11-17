@@ -20,10 +20,13 @@ app = FastAPI(
     description="Capacitated vehicle routing for waste collection (BuildX 0.1 – Challenge 05).",
 )
 
-origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",")
+# Allow the Vite dev server on ANY local port (5173, 5174, ...) plus any
+# extra origins listed in the CORS_ORIGINS environment variable.
+origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in origins if o.strip()],
+    allow_origins=origins,
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_methods=["*"],
     allow_headers=["*"],
 )
